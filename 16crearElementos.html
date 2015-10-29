@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8"/>
+		<title>16 Crear, copiar y remover elementos</title>
+		
+		<!--Hojas de estilo -->		
+		<style type="text/css">
+			body,html{
+				background:#FFF;
+				margin:0;
+				padding:0;
+			}
+						
+			#caja1,#caja2,.nuevaCaja{
+				background:#00ff00;
+				display:block;
+				height:100px;
+				margin:20px auto;
+				width:400px;
+			}
+			
+			#caja1{
+				background:#ff0040;
+				height:150px;
+			}
+			
+			#caja2{
+				background:#0080ff;
+				padding:15px;
+				border-radius:60px 0 60px 0;
+			}
+			
+			p{
+				margin-left:10px;
+				font-weight:bold;
+			}
+			
+			.nuevo{
+				color:#7093DB;
+			}
+			
+			#cajas2{
+				background:#871E78;				
+			}
+			
+			#cajas2 div{
+				background:#C0C0C0;
+				display:block;
+				width:400px;
+				height:100px;
+				margin:20px auto;
+			}
+			
+		</style>
+		
+		<!--Scripts Aca -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js">		
+		</script>
+		<script type="text/javascript">
+			var contador=0;
+			var contadorCaja=0;
+			var parrafoAntes=-1;
+			var parrafoDespues=1;
+			
+			//los metodos append(), appendTo() --> agregan hijos al final
+			//los metodos prepend(), prependTo() --> agregan hijos al principio
+			
+			//los metodos insertBefore(), before() --> agregan antes del elemento indicado
+			//los metodos insertAfter(), after() --> agregan despues del elemento indicado
+		
+			function moverFinal(){
+				
+				//$('origen').appendTo($('destino'));
+				
+				//toma el 1er li, y lo mueve al final del ol				
+				//$('ol li:first').appendTo('ol:first');
+				
+				//.append() --> funciona igual que appendTo, pero se indica primero el destino
+				//$('destino').append($('origen'));
+				$('ol:first').append($('ol li:first'));
+			}
+			
+			function agregarFinal(){
+				//$('origen').appendTo($('destino'));
+				
+				//Creamos un nuevo elemento y lo agregamos al final de la lista				
+				//$('<li class="nuevo">Nuevo elemento '+contador+'</li>').appendTo('ol');
+				
+				//lo mismo que appenTo , pero cambia destino, origen:
+				$('ol').append('<li class="nuevo">Nuevo elemento '+contador+'</li>');
+				
+				contador++;
+			}
+			
+			function moverPrincipio(){
+				//$('origen').prependTo($('destino'));
+								
+				//toma el ultimo div, y lo mueve al principio, osea que queda como primer hijo del div cajas, que es el que contiene los demas divs				
+				//$('div:last').prependTo('#cajas');
+				
+				//.prepend() --> funciona igual que prependTo, pero se indica primero el destino
+				//$('destino').prepend($('origen'));
+				$('#cajas').prepend($('div:last'));
+			}
+			
+			function agregarPrincipio(){
+				//$('origen').prependTo($('destino'));
+				
+				//Creamos un nuevo div y lo agregamos como 1er hijo del div cajas				
+				//$('<div class="nuevaCaja"><p>Nuevo Div '+contadorCaja+'</p></div>').prependTo('#cajas');
+				
+				//lo mismo que prependTo , pero cambia destino, origen:
+				$('#cajas').prepend('<div class="nuevaCaja"><p>Nuevo Div '+contadorCaja+'</p></div>');
+				
+				contadorCaja++;
+			}
+			
+			function agregarAntes(){
+				//$('origen').insertBefore($('destino'));
+								
+				//Inserta un parrafo antes del otro parrafo				
+				//$('<p>Parrafo Anterior'+parrafoAntes+'</p>').insertBefore('#caja1 p:first');
+				
+				//.before() --> funciona igual que insertBefore(), pero se indica primero el destino
+				//$('destino').before($('origen'));
+				$('#caja1 p:first').before('<p>Parrafo Anterior'+parrafoAntes+'</p>');
+				
+				parrafoAntes--;
+			}
+			
+			function agregarDespues(){
+				//$('origen').insertAfter($('destino'));
+				
+				//inserta un parrafo despues del ultimo parrafo				
+				//$('<p>Parrafo siguiente'+parrafoDespues+'</p>').insertAfter('#caja1 p:last');
+				
+				//lo mismo que insertAfter , pero cambia destino, origen:
+				$('#caja1 p:last').after('<p>Parrafo siguiente'+parrafoDespues+'</p>');
+				
+				parrafoDespues++;
+			}
+			
+			function clonar(){
+				//crea una copia de un elemento
+				
+				var clon=$('#cajas').clone();
+				//cambiamos el id, ya que debe ser unico
+				clon.attr("id","cajas2");				
+				
+				//lo agregamos despues del boton de clonar:
+				$('#clonar').after(clon);
+				
+				//quitamos los id de los elemntos que tenga dentro (los divs)				
+				$('#cajas2 div').removeAttr("id");
+				
+				//eliminamos los botones
+				$('#cajas2 div button').remove();
+			}
+			
+			function eliminar(){
+				$('#caja1 p:last').remove();
+			}
+			
+			$(document).on("ready",function(){
+				$('#mov_final').on('click',moverFinal);
+				$('#agr_final').on('click',agregarFinal);
+				$('#mov_prin').on('click',moverPrincipio);
+				$('#agr_prin').on('click',agregarPrincipio);
+				$('#agr_antes').on('click',agregarAntes);
+				$('#agr_desp').on('click',agregarDespues);
+				$('#clonar').on('click',clonar);				
+				$('#eliminar').on('click',eliminar);
+			});
+		
+		</script>
+		
+	</head>
+	<body>
+		<ol>
+			<li>Elemento 1</li>
+			<li>Elemento 2</li>
+			<li>Elemento 3</li>
+			<li>Elemento 4</li>
+		</ol>
+		
+		<button id="mov_final">Mover 1er elemento al final</button>
+		<button id="agr_final">Agregar Nuevo elemento al final</button>
+		
+		<div id="cajas">
+			<div id="caja1">
+				<p>Div 1</p>
+				<button id="agr_antes">Agregar parrafo antes</button>
+				<button id="agr_desp">Agregar parrafo despues</button>
+				<button id="eliminar">Eliminar ultimo parrafo</button>
+			</div>
+			
+			<div id="caja2">
+				<p>Div 2</p>
+			</div>
+		</div>
+		
+		<button id="mov_prin">Mover Ultimo Div al Principio</button>
+		<button id="agr_prin">Agregar Nuevo Div al Principio</button>
+		
+		<button id="clonar">Clonar Div Cajas</button>
+	</body>
+</html>
